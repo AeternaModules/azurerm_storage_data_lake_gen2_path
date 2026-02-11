@@ -26,7 +26,7 @@ EOT
     ace = optional(object({
       id          = optional(string)
       permissions = string
-      scope       = optional(string, "access")
+      scope       = optional(string) # Default: "access"
       type        = string
     }))
   }))
