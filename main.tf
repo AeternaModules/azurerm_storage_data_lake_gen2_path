@@ -9,7 +9,7 @@ resource "azurerm_storage_data_lake_gen2_path" "storage_data_lake_gen2_paths" {
   owner              = each.value.owner
 
   dynamic "ace" {
-    for_each = each.value.ace != null ? [each.value.ace] : []
+    for_each = each.value.ace != null ? each.value.ace : []
     content {
       id          = ace.value.id
       permissions = ace.value.permissions
