@@ -1,33 +1,29 @@
-output "storage_data_lake_gen2_paths" {
-  description = "All storage_data_lake_gen2_path resources"
-  value       = azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths
-}
 output "storage_data_lake_gen2_paths_ace" {
-  description = "List of ace values across all storage_data_lake_gen2_paths"
-  value       = [for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : v.ace]
+  description = "Map of ace values across all storage_data_lake_gen2_paths, keyed the same as var.storage_data_lake_gen2_paths"
+  value       = { for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : k => v.ace }
 }
 output "storage_data_lake_gen2_paths_filesystem_name" {
-  description = "List of filesystem_name values across all storage_data_lake_gen2_paths"
-  value       = [for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : v.filesystem_name]
+  description = "Map of filesystem_name values across all storage_data_lake_gen2_paths, keyed the same as var.storage_data_lake_gen2_paths"
+  value       = { for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : k => v.filesystem_name }
 }
 output "storage_data_lake_gen2_paths_group" {
-  description = "List of group values across all storage_data_lake_gen2_paths"
-  value       = [for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : v.group]
+  description = "Map of group values across all storage_data_lake_gen2_paths, keyed the same as var.storage_data_lake_gen2_paths"
+  value       = { for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : k => v.group }
 }
 output "storage_data_lake_gen2_paths_owner" {
-  description = "List of owner values across all storage_data_lake_gen2_paths"
-  value       = [for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : v.owner]
+  description = "Map of owner values across all storage_data_lake_gen2_paths, keyed the same as var.storage_data_lake_gen2_paths"
+  value       = { for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : k => v.owner }
 }
 output "storage_data_lake_gen2_paths_path" {
-  description = "List of path values across all storage_data_lake_gen2_paths"
-  value       = [for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : v.path]
+  description = "Map of path values across all storage_data_lake_gen2_paths, keyed the same as var.storage_data_lake_gen2_paths"
+  value       = { for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : k => v.path }
 }
 output "storage_data_lake_gen2_paths_resource" {
-  description = "List of resource values across all storage_data_lake_gen2_paths"
-  value       = [for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : v.resource]
+  description = "Map of resource values across all storage_data_lake_gen2_paths, keyed the same as var.storage_data_lake_gen2_paths"
+  value       = { for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : k => v.resource }
 }
 output "storage_data_lake_gen2_paths_storage_account_id" {
-  description = "List of storage_account_id values across all storage_data_lake_gen2_paths"
-  value       = [for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : v.storage_account_id]
+  description = "Map of storage_account_id values across all storage_data_lake_gen2_paths, keyed the same as var.storage_data_lake_gen2_paths"
+  value       = { for k, v in azurerm_storage_data_lake_gen2_path.storage_data_lake_gen2_paths : k => v.storage_account_id }
 }
 
