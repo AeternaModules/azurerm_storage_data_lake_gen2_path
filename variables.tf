@@ -26,7 +26,7 @@ EOT
     ace = optional(list(object({
       id          = optional(string)
       permissions = string
-      scope       = optional(string) # Default: "access"
+      scope       = optional(string)
       type        = string
     })))
   }))
@@ -38,6 +38,12 @@ EOT
   #   source:    [from commonids.ValidateStorageAccountID] !ok
   # path: storage_account_id
   #   source:    [from commonids.ValidateStorageAccountID] err != nil
+  # path: filesystem_name
+  #   source:    [from validateStorageDataLakeGen2FileSystemName] !regexp.MustCompile(`^\$root$|^[0-9a-z-]+$`).MatchString(value)
+  # path: filesystem_name
+  #   source:    [from validateStorageDataLakeGen2FileSystemName] len(value) < 3 || len(value) > 63
+  # path: filesystem_name
+  #   source:    [from validateStorageDataLakeGen2FileSystemName] regexp.MustCompile(`^-`).MatchString(value)
   # path: resource
   #   condition: contains(["directory"], value)
   #   message:   must be one of: directory
