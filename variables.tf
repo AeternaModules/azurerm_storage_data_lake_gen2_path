@@ -30,39 +30,54 @@ EOT
       type        = string
     })))
   }))
-  # --- Unconfirmed validation candidates, derived from azurerm_storage_data_lake_gen2_path's provider source ---
-  # Not auto-enabled: either a bespoke provider validator we can't safely translate,
-  # or a path that crosses a list-typed block (needs its own for_each wrapping).
-  # Review, translate into a real validation{} block above, and delete once confirmed.
-  # path: storage_account_id
-  #   source:    [from commonids.ValidateStorageAccountID] !ok
-  # path: storage_account_id
-  #   source:    [from commonids.ValidateStorageAccountID] err != nil
-  # path: filesystem_name
-  #   source:    [from validateStorageDataLakeGen2FileSystemName] !regexp.MustCompile(`^\$root$|^[0-9a-z-]+$`).MatchString(value)
-  # path: filesystem_name
-  #   source:    [from validateStorageDataLakeGen2FileSystemName] len(value) < 3 || len(value) > 63
-  # path: filesystem_name
-  #   source:    [from validateStorageDataLakeGen2FileSystemName] regexp.MustCompile(`^-`).MatchString(value)
-  # path: resource
-  #   condition: contains(["directory"], value)
-  #   message:   must be one of: directory
-  # path: owner
-  #   source:    validation.Any(...) - no translation rule yet, add one
-  # path: group
-  #   source:    validation.Any(...) - no translation rule yet, add one
-  # path: ace.scope
-  #   condition: contains(["default", "access"], value)
-  #   message:   must be one of: default, access
-  # path: ace.type
-  #   condition: contains(["user", "group", "mask", "other"], value)
-  #   message:   must be one of: user, group, mask, other
-  # path: ace.id
-  #   condition: can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", value))
-  #   message:   must be a valid UUID
-  # path: ace.permissions
-  #   source:    [from validate.ADLSAccessControlPermissions] !ok
-  # path: ace.permissions
-  #   source:    [from validate.ADLSAccessControlPermissions] err != nil
+  validation {
+    condition = alltrue([
+      for k, v in var.storage_data_lake_gen2_paths : (
+        contains(["directory"], v.resource)
+      )
+    ])
+    error_message = "must be one of: directory"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.storage_data_lake_gen2_paths : (
+        v.owner == null || ((can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", v.owner))) || (contains(["$superuser"], v.owner)))
+      )
+    ])
+    error_message = "any of: must be a valid UUID; must be one of: $superuser"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.storage_data_lake_gen2_paths : (
+        v.group == null || ((can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", v.group))) || (contains(["$superuser"], v.group)))
+      )
+    ])
+    error_message = "any of: must be a valid UUID; must be one of: $superuser"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.storage_data_lake_gen2_paths : (
+        v.ace == null || alltrue([for item in v.ace : (item.scope == null || (contains(["default", "access"], item.scope)))])
+      )
+    ])
+    error_message = "must be one of: default, access"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.storage_data_lake_gen2_paths : (
+        v.ace == null || alltrue([for item in v.ace : (contains(["user", "group", "mask", "other"], item.type))])
+      )
+    ])
+    error_message = "must be one of: user, group, mask, other"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.storage_data_lake_gen2_paths : (
+        v.ace == null || alltrue([for item in v.ace : (item.id == null || (can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", item.id))))])
+      )
+    ])
+    error_message = "must be a valid UUID"
+  }
+  # Note: 7 additional provider-side validators are enforced at apply time but not mirrored as validation{} blocks here (bespoke or non-mechanically-translatable).
 }
 
